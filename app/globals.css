@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --surface: #1a1a26;
+  --surface2: #22223a;
+  --border: #2a2a42;
+  --border2: #38385a;
+  --accent: #e8b84b;
+  --accent2: #c94040;
+  --text: #f0eff8;
+  --text2: #9898b8;
+  --text3: #5a5a78;
+  --success: #4bb87a;
+  --warning: #e87a2a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  min-height: 100vh;
+}
+
+/* Stitching pattern for baseball feel */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(232,184,75,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(201,64,64,0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.font-serif { font-family: 'Noto Serif JP', serif; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* Animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-warn {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,122,42,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(232,122,42,0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.animate-in { animation: slideIn 0.25s ease forwards; }
+.animate-spin { animation: spin 0.8s linear infinite; }
