@@ -215,7 +215,13 @@ const handleSubmit = async () => {
 export default function Home() {
   const [entries, setEntries] = useState<OuenkaEntry[]>([])
   const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState<FormData>(empty)
+  const [form, setForm] = useState<Partial<Song>>(() => {
+    if (typeof window === "undefined") return emptyForm();
+    try {
+      const saved = localStorage.getItem("ouen_draft");
+      return saved ? JSON.parse(saved) : emptyForm();
+    } catch { return emptyForm(); }
+  });
   const [submitting, setSubmitting] = useState(false)
   const [duplicates, setDuplicates] = useState<OuenkaEntry[]>([])
   const [dupChecked, setDupChecked] = useState(false)
