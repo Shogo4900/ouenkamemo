@@ -178,8 +178,25 @@ const handleSubmit = async () => {
             <span style={{ fontSize: 12, color: 'var(--text3)', flex: 1 }}>
               {selected.size > 0 ? `${selected.size}件を選択中` : '選手を選択してください'}
             </span>
-            <button onClick={onClose} style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text2)', cursor: 'pointer', fontSize: 13, fontFamily: 'inherit' }}>キャンセル</button>
-            <button onClick={handleSubmit} disabled={loading || selected.size < (mode === 'add' ? 2 : 1)} style={{
+            <button
+                          onClick={async()=>{
+                            const next=!song.良曲;
+                            setAllSongs(prev=>prev.map(s=>s.id===song.id?{...s,良曲:next}:s));
+                            try{
+                              const r=await fetch(`/api/songs/${encodeURIComponent(song.id)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({良曲:next})});
+                              const d=await r.json();
+                              if(d.error){showToast(d.error,false);setAllSongs(prev=>prev.map(s=>s.id===song.id?{...s,良曲:!next}:s));}
+                              else showToast(next?"⭐ 良曲に追加":"良曲を解除");
+                            }catch{showToast("更新に失敗しました",false);setAllSongs(prev=>prev.map(s=>s.id===song.id?{...s,良曲:!next}:s));}
+                          }}
+                          title={song.良曲?"良曲を解除":"良曲に追加"}
+                          style={{...css.btn(),padding:"3px 9px",fontSize:13,
+                            color:song.良曲?"#fbbf24":"var(--text-muted)",
+                            borderColor:song.良曲?"#92400e":"var(--border)"}}>
+                          ⭐
+                        </button>
+                        <button onClick={()=>startEdit(song)} style={{...css.btn(),padding:"3px 9px",fontSize:12}}>編集</button>
+                        <button onClick={()=>setDeleteConfirm(song.id)} style={{...css.btn(false,true),padding:"3px 9px",fontSize:12}}>削除</button>
               padding: '8px 16px', borderRadius: 6, border: 'none', cursor: loading || selected.size < (mode === 'add' ? 2 : 1) ? 'not-allowed' : 'pointer',
               background: selected.size >= (mode === 'add' ? 2 : 1) ? (mode === 'add' ? 'var(--accent)' : 'var(--accent2)') : 'var(--surface2)',
               color: selected.size >= (mode === 'add' ? 2 : 1) ? '#000' : 'var(--text3)',
