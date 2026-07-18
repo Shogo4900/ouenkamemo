@@ -60,8 +60,9 @@ function RyuyoModal({ entries, onClose, onDone }: {
     })
   }
 
-  const handleSubmit = async () => {
-    if (selected.size < (mode === 'add' ? 2 : 1)) return
+const handleSubmit = async () => {
+    if(!form.選手名?.trim()){showToast("選手名は必須です",false);return;}
+    if(!form.チーム名){showToast("球団名を選択してください",false);return;}
     setLoading(true)
     try {
       if (mode === 'add') {
